@@ -164,7 +164,7 @@ function unrankedRequest(){
   ajax({ url: 'https://'+region+'.api.pvp.net/api/lol/'+region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       var sectionOne = {
-        title: 'Ranked Solo 5v5',
+        title: 'Unranked 5v5',
         items: [{
           title: 'Wins: ' + data.playerStatSummaries[10].wins
         },{
