@@ -18,18 +18,15 @@ var settings = new UI.Card({
 // ================================= Settings ==================================
 var api_key = 'f07420f5-3ae0-4c25-b5cd-dcbdf7c71605';
 var options = Settings.option();
-
-var region = options.region;
-var summonerName = options.username;
 var summoner;
 
 // Configurable with just the close callback
 Settings.config(
-  { url: 'http://www.canalesb.com/config/lolstats' },
+  { url: 'http://localhost:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options))); },
   function(e) {
 
     console.log('opening configurable');
-
+    console.log('Path: http://localhost:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options))));
     // Reset color to red before opening the webview
     var options = Settings.option();
     console.log(JSON.stringify(options));
@@ -39,12 +36,17 @@ Settings.config(
   function(e) {
     console.log('closed configurable');
     // Show the parsed response
-    console.log(JSON.stringify(e.options));
-    region = e.options.region;
-    summonerName = e.options.username;
+
+
+    if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
+      options = JSON.parse(decodeURIComponent(e.response));
+      console.log("Options = " + JSON.stringify(options));
+      settings.hide();
+      summonerRequest();
+    } else {
+      console.log("Cancelled");
+    }
     
-    settings.hide();
-    summonerRequest();
 
     // Show the raw response if parsing failed
     if (e.failed) {
@@ -76,7 +78,7 @@ var menu = new UI.Menu({
 });
 
 menu.show();
-if(!summonerName){
+if(!options.username){
   settings.show();
 } else {
   summonerRequest();
@@ -119,10 +121,10 @@ menu.on('select', function(e) {
 
 function summonerRequest(){
   //MainMenu AJAX Call
-  ajax({ url: 'https://'+region+'.api.pvp.net/api/lol/'+region+'/v1.4/summoner/by-name/'+summonerName+'?api_key='+api_key, type: 'json' },
+  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.4/summoner/by-name/'+options.username+'?api_key='+api_key, type: 'json' },
     function(data) {
-      console.log('SummonerID: ' + data[summonerName].id);
-      summoner = data[summonerName];
+      console.log('SummonerID: ' + data[options.username].id);
+      summoner = data[options.username];
       menu.item(0,0,{ title: summoner.name, subtitle: 'Level: ' + summoner.summonerLevel});
     },
     function(error){
@@ -132,7 +134,7 @@ function summonerRequest(){
 }
 
 function rankedRequest(){
-  ajax({ url: 'https://'+region+'.api.pvp.net/api/lol/'+region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
+  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       var sectionOne = {
         title: 'Ranked Solo 5v5',
@@ -161,7 +163,7 @@ function rankedRequest(){
 }
 
 function unrankedRequest(){
-  ajax({ url: 'https://'+region+'.api.pvp.net/api/lol/'+region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
+  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       var sectionOne = {
         title: 'Unranked 5v5',
