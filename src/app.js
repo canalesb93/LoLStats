@@ -30,7 +30,7 @@ var summoner;
 // Configurable with just the close callback
 function setSettings(){
   Settings.config(
-    { url: 'http://www.canalesb.com/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
+    { url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
     function(e) {
   
       console.log('opening configurable');
