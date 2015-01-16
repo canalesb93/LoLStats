@@ -151,9 +151,9 @@ function rankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       console.log('Ajax succesful');
-      for (i = 0; data.playerStatSummaries[i]; i++) { 
+      for (var i = 0; data.playerStatSummaries[i]; i++) { 
         if(data.playerStatSummaries[i].playerStatSummaryType == 'RankedSolo5x5'){
-          if(data.playerStatSummaries[i].wins == 0 && data.playerStatSummaries[i].losses == 0){
+          if(data.playerStatSummaries[i].wins === 0 && data.playerStatSummaries[i].losses === 0){
             displayNoRanked();
           } else {
             var sectionOne = {
@@ -188,28 +188,28 @@ function unrankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       console.log('Ajax succesful');
-      if(data.playerStatSummaries[10]){
-        var sectionOne = {
-          title: 'Unranked 5v5',
-          items: [{
-            title: 'Wins: ' + data.playerStatSummaries[10].wins
-          },{
-            title: 'Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalChampionKills,
-            subtitle: 'Assists: ' + data.playerStatSummaries[10].aggregatedStats.totalAssists
-          },{
-            title: 'Minion Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalMinionKills,
-            subtitle: 'Neutral Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalNeutralMinionsKilled
-          },{
-            title: 'Turret Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalTurretsKilled
-          }]
-        };
-        unrankedSummary.section(0, sectionOne);
-      } else {
-        warning.scrollable(false);
-        warning.subtitle('Unranked Data not found.');
-        warning.body('Play some unranked games to get this information.');
-        unrankedSummary.hide();
-        warning.show();
+      for (var i = 0; data.playerStatSummaries[i]; i++) { 
+        if(data.playerStatSummaries[i].playerStatSummaryType == 'Unranked'){
+          if(data.playerStatSummaries[i].wins === 0 && data.playerStatSummaries[i].losses === 0){
+            displayNoUnranked();
+          } else {
+            var sectionOne = {
+              title: 'Unranked 5v5',
+              items: [{
+                title: 'Wins: ' + data.playerStatSummaries[10].wins
+              },{
+                title: 'Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalChampionKills,
+                subtitle: 'Assists: ' + data.playerStatSummaries[10].aggregatedStats.totalAssists
+              },{
+                title: 'Minion Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalMinionKills,
+                subtitle: 'Neutral Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalNeutralMinionsKilled
+              },{
+                title: 'Turret Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalTurretsKilled
+              }]
+            };
+            unrankedSummary.section(0, sectionOne);
+          }
+        }  
       }
     }, 
     function(error){
@@ -230,5 +230,13 @@ function displayNoRanked(){
   warning.subtitle('Ranked Data not found.');
   warning.body('Play some ranked games to get this information.');
   rankedSummary.hide();
+  warning.show();
+}
+
+function displayNoUnranked(){
+  warning.scrollable(false);
+  warning.subtitle('Unranked Data not found.');
+  warning.body('Play some unranked games to get this information.');
+  unrankedSummary.hide();
   warning.show();
 }
