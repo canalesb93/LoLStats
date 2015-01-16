@@ -30,11 +30,11 @@ var summoner;
 // Configurable with just the close callback
 function setSettings(){
   Settings.config(
-    { url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
+    { url: 'http://www.canalesb.com/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
     function(e) {
   
       console.log('opening configurable');
-      console.log('Path: http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
+      console.log('Path: http://www.canalesb.com/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
       // Reset color to red before opening the webview
       console.log(JSON.stringify(options));
   
@@ -50,7 +50,7 @@ function setSettings(){
         //Turn Summoner Name into queryable and set in Settings
         options.username = superTrim(options.username);
         console.log('Summoner end name: '+options.username);
-        Settings.option('username', options.username;
+        Settings.option('username', options.username);
 
         console.log("Options = " + JSON.stringify(options));
         summonerRequest();
