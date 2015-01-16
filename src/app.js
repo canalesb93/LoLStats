@@ -155,7 +155,7 @@ function rankedRequest(){
   if(rankedPresent){
     rankedSummary.show();    
   } else {
-    displayNoUnranked(); 
+    displayNoRanked(); 
   }
 }
 
@@ -196,7 +196,7 @@ function statsRequest(){
       for (var i = 0; data.playerStatSummaries[i]; i++) {
         console.log('type: ' + data.playerStatSummaries[i].playerStatSummaryType);
         if(data.playerStatSummaries[i].playerStatSummaryType == 'Unranked'){
-          var sectionOne = {
+          var sectionUnranked = {
             title: 'Unranked 5v5',
             items: [{
               title: 'Wins: ' + data.playerStatSummaries[i].wins
@@ -210,13 +210,13 @@ function statsRequest(){
               title: 'Turret Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalTurretsKilled
             }]
           };
-          unrankedSummary.section(0, sectionOne);
+          unrankedSummary.section(0, sectionUnranked);
         } else if(data.playerStatSummaries[i].playerStatSummaryType == 'RankedSolo5x5'){
           if(data.playerStatSummaries[i].wins === 0 && data.playerStatSummaries[i].losses === 0){
             console.log('No ranked games found');
           } else {
             rankedPresent = true;
-            var sectionOne = {
+            var sectionRanked = {
               title: 'Ranked Solo 5v5',
               items: [{
                 title: 'Wins: ' + data.playerStatSummaries[i].wins
@@ -232,7 +232,7 @@ function statsRequest(){
                 title: 'Turret Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalTurretsKilled
               }]
             };
-            rankedSummary.section(0, sectionOne);
+            rankedSummary.section(0, sectionRanked);
           }
         }
       }
