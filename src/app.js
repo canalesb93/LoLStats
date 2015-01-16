@@ -227,16 +227,24 @@ function matchRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/game/by-summoner/'+summoner.id+'/recent?api_key='+api_key, type: 'json' },
     function(data) {
       console.log('Ajax Matches request succesful!');
+      var date = new Date(date.games[0].createDate).toDateString();
+      var sectionNumber = 0;
       for (var i = 0; data.games[i] || i < 3; i++) {
         var game = data.games[i];
-        var match = {
-          title: new Date(game.createDate),
-          items: [{
-            title: game.subType,
-            subtitle: game.stats.championsKilled + '/' + game.stats.numDeaths + '/' + game.stats.assists
-          }]
-        };
-        matchHistory.section(i, match);
+        var matchdate = new Date(game.createDate).toDateString();
+        var result = 'Defeat';
+        if(game.stats.win)
+          result = 'Victory';
+
+        if(matchdate != date){
+          date = matchdate;
+          var sectionDate = {
+            title: date
+          };
+          matchHistory.section(i, sectionDate);
+          sectionNumber++;
+        }
+        matchHistory.item(sectionNumber, i, { title: result + ' - ' +game.stats.championsKilled + '/' + game.stats.numDeaths + '/' + game.stats.assists , subtitle: gametype[game.subType] });
       }
     }, 
     function(error){
@@ -293,3 +301,41 @@ function displayNoUnranked(){
   unrankedSummary.hide();
   warning.show();
 }
+
+
+// ================================ Constants ==================================
+
+
+var gametype = new Object(); // or just {}
+
+gametype['CUSTOM'] = "Custom";
+gametype['NORMAL_5x5_BLIND'] = "Normal 5v5";
+gametype['BOT_5x5'] = "Coop vs AI";
+gametype['BOT_5x5_INTRO'] = "Coop vs AI";
+gametype['BOT_5x5_BEGINNER'] = "Coop vs AI";
+gametype['BOT_5x5_INTERMEDIATE'] = "Coop vs AI";
+gametype['NORMAL_3x3'] = "Normal 3v3";
+gametype['NORMAL_5x5_DRAFT'] = "Normal 5v5";
+gametype['ODIN_5x5_BLIND'] = "Dominion 5v5";
+gametype['ODIN_5x5_DRAFT'] = "Dominion 5v5";
+gametype['BOT_ODIN_5x5'] = "Dominion Coop vs AI";
+gametype['RANKED_SOLO_5x5'] = "Ranked Solo 5v5";
+gametype['RANKED_PREMADE_3x3'] = "Ranked Premade 3v3";
+gametype['RANKED_PREMADE_5x5'] = "Ranked Premade 5v5";
+gametype['RANKED_TEAM_3x3'] = "Ranked Team 3v3";
+gametype['RANKED_TEAM_5x5'] = "Ranked Team 5v5";
+gametype['BOT_TT_3x3'] = "Coop vs AI";
+gametype['GROUP_FINDER_5x5'] = "Team Builder";
+gametype['ARAM_5x5'] = "ARAM";
+gametype['ONEFORALL_5x5'] = "One for All";
+gametype['FIRSTBLOOD_1x1'] = "Snowdown Showdown 1v1";
+gametype['FIRSTBLOOD_2x2'] = "Snowdown Showdown 2v2";
+gametype['SR_6x6'] = "6x6 Hexakill";
+gametype['URF_5x5'] = "Ultra Rapid Fire";
+gametype['BOT_URF_5x5'] = "Ultra Rapid Fire AI";
+gametype['NIGHTMARE_BOT_5x5_RANK1'] = "Doom Bots";
+gametype['NIGHTMARE_BOT_5x5_RANK2'] = "Doom Bots";
+gametype['NIGHTMARE_BOT_5x5_RANK5'] = "Doom Bots";
+gametype['ASCENSION_5x5'] = "Ascension";
+gametype['HEXAKILL'] = "6x6 Hexakill"
+gametype['KING_PORO_5x5'] = "King Poro"
