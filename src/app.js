@@ -47,6 +47,11 @@ function setSettings(){
   
       if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
         options = JSON.parse(decodeURIComponent(e.response));
+        //Turn Summoner Name into queryable and set in Settings
+        options.username = superTrim(options.username);
+        console.log('Summoner end name: '+options.username);
+        Settings.option('username', options.username;
+
         console.log("Options = " + JSON.stringify(options));
         summonerRequest();
         setSettings();
@@ -212,4 +217,10 @@ function unrankedRequest(){
       unrankedSummary.item(0,0,{ title: 'Loading Failed'});
     }
   );
+}
+
+function superTrim(name){
+  var newName = name.replace(/\s+/g, '');
+  newName = newName.toLowerCase();
+  return newName;
 }
