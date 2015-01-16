@@ -26,6 +26,9 @@ var menu = new UI.Menu({
     },{
       title: 'Unranked 5v5',
       subtitle: 'Wins, Kills, Assits, Minions Killed, Turrets Killed'
+    },{
+      title: 'Recent Matches',
+      subtitle: 'View recent matches stats'
     }]
   }]
 });
@@ -40,10 +43,21 @@ var rankedSummary = new UI.Menu({
   }]
 });
 
+
 //Preloading UnRanked Menu
 var unrankedSummary = new UI.Menu({
   sections: [{
     title: 'Unranked 5v5',
+    items: [{
+      title: 'Loading...' 
+    }]
+  }]
+});
+
+//Preloading Recent Matches
+var matchHistory = new UI.Menu({
+  sections: [{
+    title: 'Loading...',
     items: [{
       title: 'Loading...' 
     }]
@@ -66,7 +80,7 @@ var warning = new UI.Card({
 // ================================= Settings ==================================
 var api_key = 'f07420f5-3ae0-4c25-b5cd-dcbdf7c71605';
 var options = Settings.option();
-var summoner, stats;
+var summoner, stats, recentMatches;
 var rankedPresent = false;
 
 // Configurable with just the close callback
@@ -121,9 +135,9 @@ menu.on('select', function(e) {
   console.log('The item is titled "' + e.item.title + '"');
 
   if(e.itemIndex === 0 && e.sectionIndex === 1){
-    rankedRequest();
+    rankedOpen();
   } else if(e.itemIndex === 1 && e.sectionIndex === 1){
-    unrankedRequest();
+    unrankedOpen();
   }
 });
 
@@ -149,7 +163,7 @@ function summonerRequest(){
 }
 
 function statsRequest(){
-  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
+  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json', async: false },
     function(data) {
       stats = data;
       console.log('Ajax Stats request succesful!');
@@ -205,9 +219,34 @@ function statsRequest(){
   );
 }
 
+
+function matchRequest(){
+
+  ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/game/by-summoner/'+summoner.id+'/recent?api_key='+api_key, type: 'json' },
+    function(data) {
+      console.log('Ajax Matches request succesful!');
+      for (var i = 0; data.games[i] || i < 3; i++) {
+        game = data.games[i];
+        var match = {
+          title: new Date(game.createDate),
+          items: [{
+            title: game.subType,
+            subtitle: game.stats.championsKilled + '/' + game.stats.numDeaths + '/' + game.stats.assists
+          }]
+        };
+        menu.section(i, match);
+      }
+    }, 
+    function(error){
+      console.log('The ajax request failed: ' + error);
+      matchHistory.item(0,0,{ title: 'Loading Failed'});
+    }
+  );
+}
+
 // ============================== Usage Functions===============================
 
-function rankedRequest(){
+function rankedOpen(){
   if(!stats){
     statsRequest();
   }
@@ -218,12 +257,18 @@ function rankedRequest(){
   }
 }
 
-function unrankedRequest(){
+function unrankedOpen(){
   if(!stats){
     statsRequest();
   }
   unrankedSummary.show();    
 }
+
+function recentOpen(){
+  matchRequest();
+  matchHistory.show();
+}
+
 
 function superTrim(name){
   var newName = name.replace(/\s+/g, '');
