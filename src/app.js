@@ -151,30 +151,30 @@ function rankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       console.log('Ajax succesful');
-      if(data.playerStatSummaries[9]){
-        var sectionOne = {
-          title: 'Ranked Solo 5v5',
-          items: [{
-            title: 'Wins: ' + data.playerStatSummaries[9].wins
-          },{
-            title: 'Losses: ' + data.playerStatSummaries[9].losses
-          },{
-            title: 'Kills: ' + data.playerStatSummaries[9].aggregatedStats.totalChampionKills,
-            subtitle: 'Assists: ' + data.playerStatSummaries[9].aggregatedStats.totalAssists
-          },{
-            title: 'Minion Kills: ' + data.playerStatSummaries[9].aggregatedStats.totalMinionKills,
-            subtitle: 'Neutral Kills: ' + data.playerStatSummaries[9].aggregatedStats.totalNeutralMinionsKilled
-          },{
-            title: 'Turret Kills: ' + data.playerStatSummaries[9].aggregatedStats.totalTurretsKilled
-          }]
-        };
-        rankedSummary.section(0, sectionOne);
-      } else {
-        warning.scrollable(false);
-        warning.subtitle('Ranked Data not found.');
-        warning.body('Play some ranked games to get this information.');
-        rankedSummary.hide();
-        warning.show();
+      for (i = 0; data.playerStatSummaries[i]; i++) { 
+        if(data.playerStatSummaries[i].playerStatSummaryType == 'RankedSolo5x5'){
+          if(data.playerStatSummaries[i].wins == 0 && data.playerStatSummaries[i].losses == 0){
+            displayNoRanked();
+          } else {
+            var sectionOne = {
+              title: 'Ranked Solo 5v5',
+              items: [{
+                title: 'Wins: ' + data.playerStatSummaries[i].wins
+              },{
+                title: 'Losses: ' + data.playerStatSummaries[i].losses
+              },{
+                title: 'Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalChampionKills,
+                subtitle: 'Assists: ' + data.playerStatSummaries[i].aggregatedStats.totalAssists
+              },{
+                title: 'Minion Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalMinionKills,
+                subtitle: 'Neutral Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalNeutralMinionsKilled
+              },{
+                title: 'Turret Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalTurretsKilled
+              }]
+            };
+            rankedSummary.section(0, sectionOne);
+          }
+        }
       }
     }, 
     function(error){
@@ -223,4 +223,12 @@ function superTrim(name){
   var newName = name.replace(/\s+/g, '');
   newName = newName.toLowerCase();
   return newName;
+}
+
+function displayNoRanked(){
+  warning.scrollable(false);
+  warning.subtitle('Ranked Data not found.');
+  warning.body('Play some ranked games to get this information.');
+  rankedSummary.hide();
+  warning.show();
 }
