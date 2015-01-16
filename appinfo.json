@@ -39,7 +39,7 @@
     "shortName": "LoL Stats",
     "uuid": "0b3e47f2-e2ee-463e-aa7b-eb3776eae887",
     "versionCode": 1,
-    "versionLabel": "1.02",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": false
     }
