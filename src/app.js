@@ -22,13 +22,12 @@ var summoner;
 
 // Configurable with just the close callback
 Settings.config(
-  { url: 'http://localhost:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options))); },
+  { url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
   function(e) {
 
     console.log('opening configurable');
-    console.log('Path: http://localhost:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options))));
+    console.log('Path: http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
     // Reset color to red before opening the webview
-    var options = Settings.option();
     console.log(JSON.stringify(options));
 
     settings.show();
@@ -36,21 +35,15 @@ Settings.config(
   function(e) {
     console.log('closed configurable');
     // Show the parsed response
-
+    settings.hide();
 
     if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
       options = JSON.parse(decodeURIComponent(e.response));
       console.log("Options = " + JSON.stringify(options));
-      settings.hide();
       summonerRequest();
+      Settings.config({ url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) }); 
     } else {
       console.log("Cancelled");
-    }
-    
-
-    // Show the raw response if parsing failed
-    if (e.failed) {
-      console.log("failed: " + e.response);
     }
   }
 );
