@@ -188,27 +188,24 @@ function unrankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
       console.log('Ajax succesful');
-      for (var i = 0; data.playerStatSummaries[i]; i++) { 
+      for (var i = 0; data.playerStatSummaries[i]; i++) {
+        console.log('type: ' + data.playerStatSummaries[i].playerStatSummaryType);
         if(data.playerStatSummaries[i].playerStatSummaryType == 'Unranked'){
-          if(data.playerStatSummaries[i].wins === 0 && data.playerStatSummaries[i].losses === 0){
-            displayNoUnranked();
-          } else {
-            var sectionOne = {
-              title: 'Unranked 5v5',
-              items: [{
-                title: 'Wins: ' + data.playerStatSummaries[10].wins
-              },{
-                title: 'Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalChampionKills,
-                subtitle: 'Assists: ' + data.playerStatSummaries[10].aggregatedStats.totalAssists
-              },{
-                title: 'Minion Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalMinionKills,
-                subtitle: 'Neutral Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalNeutralMinionsKilled
-              },{
-                title: 'Turret Kills: ' + data.playerStatSummaries[10].aggregatedStats.totalTurretsKilled
-              }]
-            };
-            unrankedSummary.section(0, sectionOne);
-          }
+          var sectionOne = {
+            title: 'Unranked 5v5',
+            items: [{
+              title: 'Wins: ' + data.playerStatSummaries[i].wins
+            },{
+              title: 'Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalChampionKills,
+              subtitle: 'Assists: ' + data.playerStatSummaries[i].aggregatedStats.totalAssists
+            },{
+              title: 'Minion Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalMinionKills,
+              subtitle: 'Neutral Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalNeutralMinionsKilled
+            },{
+              title: 'Turret Kills: ' + data.playerStatSummaries[i].aggregatedStats.totalTurretsKilled
+            }]
+          };
+          unrankedSummary.section(0, sectionOne);
         }  
       }
     }, 
