@@ -80,7 +80,7 @@ var warning = new UI.Card({
 // ================================= Settings ==================================
 var api_key = 'f07420f5-3ae0-4c25-b5cd-dcbdf7c71605';
 var options = Settings.option();
-var summoner, stats, recentMatches;
+var summoner, stats;
 var rankedPresent = false;
 
 // Configurable with just the close callback
@@ -138,6 +138,8 @@ menu.on('select', function(e) {
     rankedOpen();
   } else if(e.itemIndex === 1 && e.sectionIndex === 1){
     unrankedOpen();
+  } else if(e.itemIndex === 2 && e.sectionIndex === 1){
+    recentOpen();
   }
 });
 
@@ -226,7 +228,7 @@ function matchRequest(){
     function(data) {
       console.log('Ajax Matches request succesful!');
       for (var i = 0; data.games[i] || i < 3; i++) {
-        game = data.games[i];
+        var game = data.games[i];
         var match = {
           title: new Date(game.createDate),
           items: [{
@@ -234,7 +236,7 @@ function matchRequest(){
             subtitle: game.stats.championsKilled + '/' + game.stats.numDeaths + '/' + game.stats.assists
           }]
         };
-        menu.section(i, match);
+        matchHistory.section(i, match);
       }
     }, 
     function(error){
