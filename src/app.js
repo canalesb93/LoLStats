@@ -19,8 +19,7 @@ var settings = new UI.Card({
 // Error card
 var warning = new UI.Card({
   title: 'Error',
-  subicon: 'images/lolstats.png',
-  scrollable: false
+  icon: 'images/lolstats.png'
 });
 
 // ================================= Settings ==================================
@@ -29,32 +28,36 @@ var options = Settings.option();
 var summoner;
 
 // Configurable with just the close callback
-Settings.config(
-  { url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
-  function(e) {
-
-    console.log('opening configurable');
-    console.log('Path: http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
-    // Reset color to red before opening the webview
-    console.log(JSON.stringify(options));
-
-    settings.show();
-  },
-  function(e) {
-    console.log('closed configurable');
-    // Show the parsed response
-    settings.hide();
-
-    if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
-      options = JSON.parse(decodeURIComponent(e.response));
-      console.log("Options = " + JSON.stringify(options));
-      summonerRequest();
-      Settings.config({ url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) }); 
-    } else {
-      console.log("Cancelled");
+function setSettings(){
+  Settings.config(
+    { url: 'http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
+    function(e) {
+  
+      console.log('opening configurable');
+      console.log('Path: http://192.168.15.132:3000/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
+      // Reset color to red before opening the webview
+      console.log(JSON.stringify(options));
+  
+      settings.show();
+    },
+    function(e) {
+      console.log('closed configurable');
+      // Show the parsed response
+      settings.hide();
+  
+      if (e.response.charAt(0) == "{" && e.response.slice(-1) == "}" && e.response.length > 5) {
+        options = JSON.parse(decodeURIComponent(e.response));
+        console.log("Options = " + JSON.stringify(options));
+        summonerRequest();
+        setSettings();
+      } else {
+        console.log("Cancelled");
+      }
     }
-  }
-);
+  );
+}
+
+setSettings();
 
 
 // ================================= Front-End =================================
@@ -124,6 +127,7 @@ function summonerRequest(){
   //MainMenu AJAX Call
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.4/summoner/by-name/'+options.username+'?api_key='+api_key, type: 'json' },
     function(data) {
+      console.log('Ajax succesful');
       console.log('SummonerID: ' + data[options.username].id);
       summoner = data[options.username];
       menu.item(0,0,{ title: summoner.name, subtitle: 'Level: ' + summoner.summonerLevel});
@@ -131,6 +135,7 @@ function summonerRequest(){
     function(error){
       console.log('The ajax request failed: ' + error);
       warning.subtitle('Summoner not found.');
+      warning.scrollable(true);
       warning.body('The account with the username "'+options.username+'" was not found on region "'+options.region+'".');
       warning.show();
     }
@@ -140,7 +145,8 @@ function summonerRequest(){
 function rankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
-      if(data.playerStatSummaries[9].wins){
+      console.log('Ajax succesful');
+      if(data.playerStatSummaries[9]){
         var sectionOne = {
           title: 'Ranked Solo 5v5',
           items: [{
@@ -159,9 +165,10 @@ function rankedRequest(){
         };
         rankedSummary.section(0, sectionOne);
       } else {
+        warning.scrollable(false);
         warning.subtitle('Ranked Data not found.');
         warning.body('Play some ranked games to get this information.');
-        rankedSummary.hide()
+        rankedSummary.hide();
         warning.show();
       }
     }, 
@@ -175,7 +182,8 @@ function rankedRequest(){
 function unrankedRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
-      if(data.playerStatSummaries[10].wins)
+      console.log('Ajax succesful');
+      if(data.playerStatSummaries[10]){
         var sectionOne = {
           title: 'Unranked 5v5',
           items: [{
@@ -192,9 +200,10 @@ function unrankedRequest(){
         };
         unrankedSummary.section(0, sectionOne);
       } else {
+        warning.scrollable(false);
         warning.subtitle('Unranked Data not found.');
         warning.body('Play some unranked games to get this information.');
-        unrankedSummary.hide()
+        unrankedSummary.hide();
         warning.show();
       }
     }, 
