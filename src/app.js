@@ -148,46 +148,6 @@ function summonerRequest(){
   );
 }
 
-function rankedRequest(){
-  if(!stats){
-    statsRequest();
-  }
-  if(rankedPresent){
-    rankedSummary.show();    
-  } else {
-    displayNoRanked(); 
-  }
-}
-
-function unrankedRequest(){
-  if(!stats){
-    statsRequest();
-  }
-  unrankedSummary.show();    
-}
-
-function superTrim(name){
-  var newName = name.replace(/\s+/g, '');
-  newName = newName.toLowerCase();
-  return newName;
-}
-
-function displayNoRanked(){
-  warning.scrollable(false);
-  warning.subtitle('Ranked Data not found.');
-  warning.body('Play some ranked games to get this information.');
-  rankedSummary.hide();
-  warning.show();
-}
-
-function displayNoUnranked(){
-  warning.scrollable(false);
-  warning.subtitle('Unranked Data not found.');
-  warning.body('Play some unranked games to get this information.');
-  unrankedSummary.hide();
-  warning.show();
-}
-
 function statsRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json' },
     function(data) {
@@ -243,4 +203,46 @@ function statsRequest(){
       rankedSummary.item(0,0,{ title: 'Loading Failed'});
     }
   );
+}
+
+// ============================== Usage Functions===============================
+
+function rankedRequest(){
+  if(!stats){
+    statsRequest();
+  }
+  if(rankedPresent){
+    rankedSummary.show();    
+  } else {
+    displayNoRanked(); 
+  }
+}
+
+function unrankedRequest(){
+  if(!stats){
+    statsRequest();
+  }
+  unrankedSummary.show();    
+}
+
+function superTrim(name){
+  var newName = name.replace(/\s+/g, '');
+  newName = newName.toLowerCase();
+  return newName;
+}
+
+function displayNoRanked(){
+  warning.scrollable(false);
+  warning.subtitle('Ranked Data not found.');
+  warning.body('Play some ranked games to get this information.');
+  rankedSummary.hide();
+  warning.show();
+}
+
+function displayNoUnranked(){
+  warning.scrollable(false);
+  warning.subtitle('Unranked Data not found.');
+  warning.body('Play some unranked games to get this information.');
+  unrankedSummary.hide();
+  warning.show();
 }
