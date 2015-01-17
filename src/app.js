@@ -13,27 +13,27 @@ var Settings = require('settings');
 
 var gametype = {}; // or just {}
 
-gametype['NONE'] = "Custom"
-gametype['NORMAL'] = "Unranked - Summoner's Rift"
-gametype['NORMAL_3x3'] = "Unranked - Twisted Treeline"
-gametype['ODIN_UNRANKED'] = "Dominion/Crystal Scar"
-gametype['ARAM_UNRANKED_5x5'] = "ARAM / Howling Abyss"
-gametype['BOT'] = "AI - Summoner's Rift"
-gametype['BOT_3x3'] = "AI - Twisted Treeline"
-gametype['RANKED_SOLO_5x5'] = "Ranked Solo- Summoner's Rift"
-gametype['RANKED_TEAM_3x3'] = "Ranked Team - Twisted Treeline"
-gametype['RANKED_TEAM_5x5'] = "Ranked Team - Summoner's Rift"
-gametype['ONEFORALL_5x5'] = "One for All"
-gametype['FIRSTBLOOD_1x1'] = "Snowdown Showdown 1x1"
-gametype['FIRSTBLOOD_2x2'] = "Snowdown Showdown 2x2"
-gametype['SR_6x6'] = "Hexakill - Summoner's Rift"
-gametype['CAP_5x5'] = "Team Builder"
-gametype['URF'] = "Ultra Rapid Fire"
-gametype['URF_BOT'] = "AI - Ultra Rapid Fire"
-gametype['NIGHTMARE_BOT'] = "Nightmare AI - Summoner's Rift"
-gametype['ASCENSION'] = "Ascension"
-gametype['HEXAKILL'] = "Hexakill - Twisted Treeline"
-gametype['KING_PORO'] = "King Poro"
+gametype['NONE'] = "Custom";
+gametype['NORMAL'] = "Unranked - Summoner's Rift";
+gametype['NORMAL_3x3'] = "Unranked - Twisted Treeline";
+gametype['ODIN_UNRANKED'] = "Dominion/Crystal Scar";
+gametype['ARAM_UNRANKED_5x5'] = "ARAM / Howling Abyss";
+gametype['BOT'] = "AI - Summoner's Rift";
+gametype['BOT_3x3'] = "AI - Twisted Treeline";
+gametype['RANKED_SOLO_5x5'] = "Ranked Solo- Summoner's Rift";
+gametype['RANKED_TEAM_3x3'] = "Ranked Team - Twisted Treeline";
+gametype['RANKED_TEAM_5x5'] = "Ranked Team - Summoner's Rift";
+gametype['ONEFORALL_5x5'] = "One for All";
+gametype['FIRSTBLOOD_1x1'] = "Snowdown Showdown 1x1";
+gametype['FIRSTBLOOD_2x2'] = "Snowdown Showdown 2x2";
+gametype['SR_6x6'] = "Hexakill - Summoner's Rift";
+gametype['CAP_5x5'] = "Team Builder";
+gametype['URF'] = "Ultra Rapid Fire";
+gametype['URF_BOT'] = "AI - Ultra Rapid Fire";
+gametype['NIGHTMARE_BOT'] = "Nightmare AI - Summoner's Rift";
+gametype['ASCENSION'] = "Ascension";
+gametype['HEXAKILL'] = "Hexakill - Twisted Treeline";
+gametype['KING_PORO'] = "King Poro";
 
 // ================================= Front-End =================================
 
