@@ -14,25 +14,25 @@ var Settings = require('settings');
 var gametype = {}; // or just {}
 
 gametype['NONE'] = "Custom";
-gametype['NORMAL'] = "Unranked - Summoner's Rift";
-gametype['NORMAL_3x3'] = "Unranked - Twisted Treeline";
+gametype['NORMAL'] = "Unranked 5v5";
+gametype['NORMAL_3x3'] = "Unranked 3v3";
 gametype['ODIN_UNRANKED'] = "Dominion/Crystal Scar";
-gametype['ARAM_UNRANKED_5x5'] = "ARAM / Howling Abyss";
-gametype['BOT'] = "AI - Summoner's Rift";
-gametype['BOT_3x3'] = "AI - Twisted Treeline";
-gametype['RANKED_SOLO_5x5'] = "Ranked Solo- Summoner's Rift";
-gametype['RANKED_TEAM_3x3'] = "Ranked Team - Twisted Treeline";
-gametype['RANKED_TEAM_5x5'] = "Ranked Team - Summoner's Rift";
+gametype['ARAM_UNRANKED_5x5'] = "ARAM/Howling Abyss";
+gametype['BOT'] = "AI 5v5";
+gametype['BOT_3x3'] = "AI 3v3";
+gametype['RANKED_SOLO_5x5'] = "Ranked Solo 5v5";
+gametype['RANKED_TEAM_3x3'] = "Ranked Team 3v3";
+gametype['RANKED_TEAM_5x5'] = "Ranked Team 5v5";
 gametype['ONEFORALL_5x5'] = "One for All";
 gametype['FIRSTBLOOD_1x1'] = "Snowdown Showdown 1x1";
 gametype['FIRSTBLOOD_2x2'] = "Snowdown Showdown 2x2";
-gametype['SR_6x6'] = "Hexakill - Summoner's Rift";
+gametype['SR_6x6'] = "Hexakill 5v5";
 gametype['CAP_5x5'] = "Team Builder";
 gametype['URF'] = "Ultra Rapid Fire";
 gametype['URF_BOT'] = "AI - Ultra Rapid Fire";
-gametype['NIGHTMARE_BOT'] = "Nightmare AI - Summoner's Rift";
+gametype['NIGHTMARE_BOT'] = "Nightmare AI 5v5";
 gametype['ASCENSION'] = "Ascension";
-gametype['HEXAKILL'] = "Hexakill - Twisted Treeline";
+gametype['HEXAKILL'] = "Hexakill 3v3";
 gametype['KING_PORO'] = "King Poro";
 
 // ================================= Front-End =================================
