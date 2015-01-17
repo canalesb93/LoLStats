@@ -115,11 +115,15 @@ function setSettings(){
     { url: 'http://www.canalesb.com/config/lolstats?'+encodeURIComponent(JSON.stringify(options)) },
     function(e) {
   
+      console.log('opening configurable');
+      console.log('Path: http://www.canalesb.com/config/lolstats?'+encodeURIComponent(JSON.stringify(options)));
       // Reset color to red before opening the webview
+      console.log(JSON.stringify(options));
   
       settings.show();
     },
     function(e) {
+      console.log('closed configurable');
       // Show the parsed response
       settings.hide();
   
@@ -127,11 +131,14 @@ function setSettings(){
         options = JSON.parse(decodeURIComponent(e.response));
         //Turn Summoner Name into queryable and set in Settings
         options.username = superTrim(options.username);
+        console.log('Summoner end name: '+options.username);
         Settings.option('username', options.username);
 
+        console.log("Options = " + JSON.stringify(options));
         summonerRequest();
         setSettings();
       } else {
+        console.log("Cancelled");
       }
     }
   );
@@ -150,6 +157,8 @@ if(!options.username){
 }
 
 menu.on('select', function(e) {
+  console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
+  console.log('The item is titled "' + e.item.title + '"');
 
   if(e.itemIndex === 0 && e.sectionIndex === 1){
     rankedOpen();
@@ -166,11 +175,14 @@ function summonerRequest(){
   //MainMenu AJAX Call
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.4/summoner/by-name/'+options.username+'?api_key='+api_key, type: 'json' },
     function(data) {
+      console.log('Ajax succesful');
+      console.log('SummonerID: ' + data[options.username].id);
       summoner = data[options.username];
       menu.item(0,0,{ title: summoner.name, subtitle: 'Level: ' + summoner.summonerLevel});
       statsRequest();
     },
     function(error){
+      console.log('The ajax request failed: ' + error);
       if(error){
         warning.subtitle('Summoner not found');
         warning.scrollable(true);
@@ -189,7 +201,9 @@ function statsRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/stats/by-summoner/'+summoner.id+'/summary?season=SEASON4&api_key='+api_key, type: 'json', async: false },
     function(data) {
       stats = data;
+      console.log('Ajax Stats request succesful!');
       for (var i = 0; data.playerStatSummaries[i]; i++) {
+        console.log('type: ' + data.playerStatSummaries[i].playerStatSummaryType);
         if(data.playerStatSummaries[i].playerStatSummaryType == 'Unranked'){
           var sectionUnranked = {
             title: 'Unranked 5v5',
@@ -208,6 +222,7 @@ function statsRequest(){
           unrankedSummary.section(0, sectionUnranked);
         } else if(data.playerStatSummaries[i].playerStatSummaryType == 'RankedSolo5x5'){
           if(data.playerStatSummaries[i].wins === 0 && data.playerStatSummaries[i].losses === 0){
+            console.log('No ranked games found');
           } else {
             rankedPresent = true;
             var sectionRanked = {
@@ -232,6 +247,7 @@ function statsRequest(){
       }
     }, 
     function(error){
+      console.log('The ajax request failed: ' + error);
       unrankedSummary.item(0,0,{ title: 'Loading Failed'});
       rankedSummary.item(0,0,{ title: 'Loading Failed'});
     }
@@ -242,6 +258,7 @@ function statsRequest(){
 function matchRequest(){
   ajax({ url: 'https://'+options.region+'.api.pvp.net/api/lol/'+options.region+'/v1.3/game/by-summoner/'+summoner.id+'/recent?api_key='+api_key, type: 'json' },
     function(data) {
+      console.log('Ajax Matches request succesful!');
       
       // Set date
       var date = new Date(data.games[0].createDate).toDateString();
@@ -273,6 +290,7 @@ function matchRequest(){
       }
     }, 
     function(error){
+      console.log('The ajax request failed: ' + error);
       matchHistory.item(0,0,{ title: 'Loading Failed'});
     }
   );
