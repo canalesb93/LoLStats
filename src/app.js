@@ -135,6 +135,8 @@ function setSettings(){
         Settings.option('username', options.username);
 
         console.log("Options = " + JSON.stringify(options));
+        
+        rankedPresent = false;
         summonerRequest();
         setSettings();
       } else {
