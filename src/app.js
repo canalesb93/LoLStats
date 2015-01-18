@@ -274,7 +274,8 @@ function matchRequest(){
         var game = data.games[i];
         var matchdate = new Date(game.createDate).toDateString();
         var result = 'Defeat:';
-        var kda = game.stats.championsKilled + '/' + game.stats.numDeaths + '/' + game.stats.assists;
+        var kills = game.stats.championsKilled, deaths = game.stats.numDeaths, assists = game.stats.assists;
+        var kda = verify(kills) + '/' + verify(deaths) + '/' + verify(assists);
         if(game.stats.win)
           result = 'Victory:';
 
@@ -338,10 +339,11 @@ function displayNoRanked(){
   warning.show();
 }
 
-function displayNoUnranked(){
-  warning.scrollable(false);
-  warning.subtitle('Unranked Data not found.');
-  warning.body('Play some unranked games to get this information.');
-  unrankedSummary.hide();
-  warning.show();
+function verify(number){
+  if(number === undefined){
+    return 0;
+  }
+  return number;
 }
+
+
